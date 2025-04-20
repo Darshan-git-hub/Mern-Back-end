@@ -8,13 +8,26 @@ const User = require('./models/User');
 
 const app = express();
 const PORT = process.env.PORT || 5001;
-const MONGO_URI = 'mongodb+srv://darshanu:darshan123@inventory.tysfea0.mongodb.net/automobiles?retryWrites=true&w=majority&appName=Inventory';
+const MONGO_URI = 'mongodb+srv://darshanu:darshan123@inventory.tysfea0.mongodb.net/?retryWrites=true&w=majority&appName=Inventory';
 
 mongoose.connect(MONGO_URI)
   .then(() => console.log('MongoDB connected successfully'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
-app.get('/', (req, res) => res.send('API is running'));
+  app.get('/', (req, res) => {
+    console.log('Root route hit');
+    res.send('API is running');
+  });
+  app.get('/api/automobiles', async (req, res) => {
+    console.log('Automobiles route hit');
+    try {
+      const automobiles = await Automobile.find();
+      res.status(200).send(automobiles);
+    } catch (error) {
+      console.error('Error fetching automobiles:', error);
+      res.status(500).send(error);
+    }
+  });
 
 const automobileSchema = new mongoose.Schema({
   companyName: { type: String, required: true },
@@ -24,16 +37,6 @@ const automobileSchema = new mongoose.Schema({
   description: { type: String, required: true }
 });
 const Automobile = mongoose.model('Automobile', automobileSchema);
-
-app.get('/api/automobiles', async (req, res) => {
-  try {
-    const automobiles = await Automobile.find();
-    res.status(200).send(automobiles);
-  } catch (error) {
-    console.error('Error fetching automobiles:', error);
-    res.status(500).send(error);
-  }
-});
 
 app.post('/api/automobiles', async (req, res) => {
   try {
