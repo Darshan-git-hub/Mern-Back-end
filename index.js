@@ -11,6 +11,18 @@ app.use(express.json()); // Middleware to parse JSON bodies
 const PORT = process.env.PORT || 5001;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://darshanu:darshan123@inventory.tysfea0.mongodb.net/automobiles?retryWrites=true&w=majority&appName=Inventory';
 
+// CORS Configuration
+const allowedOrigins = ['https://super-starship-3327dd.netlify.app', 'http://localhost:3000']; // Add localhost for local testing
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+}));
+
 // MongoDB Connection
 mongoose.connect(MONGO_URI)
   .then(() => console.log('MongoDB connected successfully'))
