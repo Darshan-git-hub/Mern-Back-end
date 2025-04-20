@@ -46,7 +46,7 @@ app.get('/api/automobiles', async (req, res) => {
 
 // POST a new automobile
 app.post('/api/automobiles', async (req, res) => {
-  console.log('Post route hit:', req.body);
+  console.log('Post route hit for automobile:', req.body);
   try {
     const automobile = new Automobile(req.body);
     await automobile.save();
@@ -59,7 +59,7 @@ app.post('/api/automobiles', async (req, res) => {
 
 // PUT (update) an automobile by ID
 app.put('/api/automobiles/:id', async (req, res) => {
-  console.log('Put route hit for ID:', req.params.id, 'with data:', req.body);
+  console.log('Put route hit for automobile ID:', req.params.id, 'with data:', req.body);
   try {
     const automobile = await Automobile.findByIdAndUpdate(req.params.id, req.body, { 
       new: true, 
@@ -75,7 +75,7 @@ app.put('/api/automobiles/:id', async (req, res) => {
 
 // DELETE an automobile by ID
 app.delete('/api/automobiles/:id', async (req, res) => {
-  console.log('Delete route hit for ID:', req.params.id);
+  console.log('Delete route hit for automobile ID:', req.params.id);
   try {
     const automobile = await Automobile.findByIdAndDelete(req.params.id);
     if (!automobile) return res.status(404).send();
@@ -83,6 +83,31 @@ app.delete('/api/automobiles/:id', async (req, res) => {
   } catch (error) {
     console.error('Error deleting automobile:', error);
     res.status(500).send(error);
+  }
+});
+
+// GET all users
+app.get('/api/users', async (req, res) => {
+  console.log('Users route hit');
+  try {
+    const users = await User.find();
+    res.status(200).send(users);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).send(error);
+  }
+});
+
+// POST a new user
+app.post('/api/users', async (req, res) => {
+  console.log('Post route hit for user:', req.body);
+  try {
+    const user = new User(req.body);
+    await user.save();
+    res.status(201).send(user);
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(400).send(error);
   }
 });
 
