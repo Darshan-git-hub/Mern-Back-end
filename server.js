@@ -8,13 +8,13 @@ require('dotenv').config(); // Make sure this is at the top of your file
 const User = require('./models/User');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 const MONGO_URI = 'mongodb+srv://darshanu:darshan123@inventory.tysfea0.mongodb.net/automobiles?retryWrites=true&w=majority&appName=Inventory';
 // MongoDB Connection
 mongoose.connect(MONGO_URI)
   .then(() => console.log('MongoDB connected successfully'))
   .catch((err) => console.error('MongoDB connection error:', err));
-
+app.get('/', (req, res) => res.send('API is running'));
 // Automobile Schema
 const automobileSchema = new mongoose.Schema({
   companyName: { type: String, required: true },
