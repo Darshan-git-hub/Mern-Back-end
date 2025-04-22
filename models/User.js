@@ -1,16 +1,11 @@
 const mongoose = require('mongoose');
 
-// Define schema
-const UserSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  password: Number, // Note: Storing passwords as numbers without hashing is insecure
-  consumer_number: Number,
-  address: String,
-  createdAt: { type: Date, default: Date.now }
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true }, // Changed to String
+  consumer_number: { type: Number, required: true },
+  address: { type: String, required: true }
 });
 
-// Create model object
-const UserModel = mongoose.model("Users", UserSchema);
-
-module.exports = UserModel;
+module.exports = mongoose.model('User', userSchema);
