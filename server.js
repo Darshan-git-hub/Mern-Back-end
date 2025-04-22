@@ -95,7 +95,7 @@ app.post('/api/auth/signin', async (req, res) => {
     }
 
     console.log(`User ${email} signed in successfully`);
-    res.status(200).json({ message: 'Sign in successful' }); // No token
+    res.status(200).json({ message: 'Sign in successful' });
   } catch (error) {
     console.error('Signin error:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
@@ -128,12 +128,13 @@ app.post('/api/automobiles', async (req, res) => {
   }
 });
 
-app.get('/api/automobiles', async (req, res) => {
+app.get('/api/automobiles/:id', async (req, res) => {
   try {
-    const automobiles = await Automobile.find();
-    res.status(200).send(automobiles);
+    const automobile = await Automobile.findById(req.params.id);
+    if (!automobile) return res.status(404).send();
+    res.status(200).send(automobile);
   } catch (error) {
-    console.error('Error fetching automobiles:', error);
+    console.error('Error fetching automobile:', error);
     res.status(500).send(error);
   }
 });
@@ -152,15 +153,8 @@ app.put('/api/automobiles/:id', async (req, res) => {
   }
 });
 
-app.get('/api/automobiles/:id', async (req, res) => {
-  try {
-    const automobile = await Automobile.findById(req.params.id);
-    if (!automobile) return res.status(404).send();
-    res.status(200).send(automobile);
-  } catch (error) {
-    console.error('Error fetching automobile:', error);
-    res.status(500).send(error);
-  }
+app.get('/api/automobiles/:id', (req, res) => {
+  res.status(405).json({ message: 'Method Not Allowed. Use PUT to update an automobile.' });
 });
 
 app.delete('/api/automobiles/:id', async (req, res) => {
@@ -174,15 +168,13 @@ app.delete('/api/automobiles/:id', async (req, res) => {
   }
 });
 
-app.get('/api/automobiles/:id', async (req, res) => {
-  try {
-    const automobile = await Automobile.findById(req.params.id);
-    if (!automobile) return res.status(404).send();
-    res.status(200).send(automobile);
-  } catch (error) {
-    console.error('Error fetching automobile:', error);
-    res.status(500).send(error);
-  }
+app.get('/api/automobiles/:id', (req, res) => {
+  res.status(405).json({ message: 'Method Not Allowed. Use DELETE to delete an automobile.' });
+});
+
+// Global Error Handler for Unhandled Routes
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' });
 });
 
 // Start Server
