@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5001;
 
 // Middleware
 const allowedOrigins = [
-  'https://super-starship-3327dd.netlify.app',
+  'https://suii-3iyc.onrender.com',
   'http://localhost:3000',
   'http://localhost:5173'
 ];
