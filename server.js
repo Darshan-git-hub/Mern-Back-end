@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs'); // Using bcryptjs
 const path = require('path');
 
 // Import the User model
@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 5001;
 const allowedOrigins = [
   'https://super-starship-3327dd.netlify.app',
   'http://localhost:3000',
-  'http://localhost:5173' // Added for Vite development
+  'http://localhost:5173'
 ];
 app.use(cors({
   origin: function (origin, callback) {
@@ -50,7 +50,7 @@ const auth = (req, res, next) => {
   if (!token) return res.status(401).json({ message: 'No token, authorization denied' });
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret'); // Use env variable or fallback
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret');
     req.user = decoded;
     next();
   } catch (err) {
